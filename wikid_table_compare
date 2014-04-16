@@ -1,0 +1,5 @@
+CREATE VIEW `wikid_table_compare` AS
+SELECT GROUP_CONCAT(CONVERT(`ID`, CHAR(8))) AS ids, GROUP_CONCAT(`post_title`) as product_name, SUBSTRING_INDEX(`post_title`,',', 1) AS product, SUBSTRING_INDEX(`post_title`,',',-1) AS amount ,`name`, `reg_price`, `sale_price`, `attr`
+FROM `wikid_product_list` 
+GROUP BY `product`
+---Second view necessary to make a better view of the data and to start the grouping process
