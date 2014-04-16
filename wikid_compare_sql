@@ -1,0 +1,18 @@
+CREATE VIEW 'wikid_product_list' AS
+SELECT  `p`.`ID`,   
+        `p`.`post_title`, 
+		`tr2`.`name`,
+        MAX(CASE WHEN `pm1`.`meta_key` = 'size' then `pm1`.`meta_value` ELSE NULL END) as attr,
+        MAX(CASE WHEN `pm1`.`meta_key` = '_regular_price' then `pm1`.`meta_value` ELSE NULL END) as reg_price,
+        MAX(CASE WHEN `pm1`.`meta_key` = '_sale_price' then `pm1`.`meta_value` ELSE NULL END) as sale_price,
+        MAX(CASE WHEN `pm1`.`meta_key` = '_sku' then `pm1`.`meta_value` ELSE NULL END) as sku
+FROM `wp_2nenbh_posts` AS `p` 
+LEFT JOIN `wp_postmeta` AS `pm1` ON ( `pm1`.`post_id` = `p`.`ID`)    
+LEFT JOIN `wp_term_relationships` AS `tr1` ON (`tr1`.`object_id` = `p`.`ID`) 
+LEFT JOIN `wp_terms` AS `tr2` ON (`tr2`.`term_id` = `tr1`.`term_taxonomy_id`)
+LEFT JOIN `wp_term_taxonomy` AS `tr3` ON (`tr3`.`term_id` = `tr2`.`term_id`) 
+WHERE `tr3`.`taxonomy` = 'product_brand' AND `p`.`post_type` = 'product' 
+GROUP BY
+   `p`.`ID`,`p`.`post_title` 
+ --
+ USED TO CREATE VIEW FOR proper data that I wanted in my module
